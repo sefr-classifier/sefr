@@ -9,7 +9,6 @@ bias = 0
 # The labels should be 0 or 1.
 def fit(train_predictors, train_target):
 
-    neglabels = train_target == 0
     # poslabels are those records where the label is positive
     # neglabels are those records where the label is negative
 
@@ -57,6 +56,10 @@ def fit(train_predictors, train_target):
 def predict(test_predictors):
 
     pred = []
+    temp = 0
+
+    for i in range(len(test_predictors)):
+        temp = np.dot(weights, (test_predictors.iloc[i]))
         if temp <= bias: pred.append(0)
         if temp > bias: pred.append(1)
 
