@@ -1,67 +1,83 @@
 import numpy as np
-import pandas as pd
-import statistics
 
-weights = []
-bias = 0
 
-# This is used for training the classifier on data. train_predictors are the main data, and train_target are the labels. 
-# The labels should be 0 or 1.
-def fit(train_predictors, train_target):
+class SEFR:
 
-    # poslabels are those records where the label is positive
-    # neglabels are those records where the label is negative
+    def __init__(self):
+        self.weights = []
+        self.bias = 0
 
-    poslabels = train_target == 1
-    neglabels = train_target == 0
+    def fit(self, train_predictors, train_target):
+        """
+        This is used for training the classifier on data.
 
-    # dfpos are the data where the labels are positive
-    # dfneg are the data where the labels are negative
-    dfpos = train_predictors.loc[poslabels] 
-    dfneg = train_predictors.loc[neglabels] 
+        Parameters
+        ----------
+        train_predictors : float, either list or numpy array
+            are the main data in DataFrame
+        train_target : integer, numpy array
+            labels, should consist of 0s and 1s
+        """
+        X = train_predictors
+        if isinstance(train_predictors, list):
+            X = np.array(train_predictors, dtype="float32")
 
-    # avgpos is the average value of each feature where the label is positive
-    # avgneg is the average value of each feature where the label is negative
-    avgpos = dfpos.mean(skipna=True) # Eq. 3
-    avgneg = dfneg.mean(skipna=True) # Eq. 4
+        y = train_target
+        if isinstance(train_target, list):
+            y = np.array(train_target, dtype="int32")
 
-    # weights are calculated based on Eq. 3 and Eq. 4
-    global weights
-    weights = (avgpos - avgneg) / (avgpos + avgneg) #Eq. 5
-    weights.fillna(0, inplace=True)
+        # pos_labels are those records where the label is positive
+        # neg_labels are those records where the label is negative
+        pos_labels = np.sign(y) == 1
+        neg_labels = np.invert(pos_labels)
 
-    posscore = []
-    negscore = []
+        # pos_indices are the data where the labels are positive
+        # neg_indices are the data where the labels are negative
+        pos_indices = X[pos_labels, :]
+        neg_indices = X[neg_labels, :]
 
-        
-    # For each record, a score is calculated. If the record is positive/negative, the score will be added to posscore/negscore
-    for i in range(len(train_predictors.index)):
-        temp = np.dot(weights, train_predictors.iloc[i,:]) #Eq. 6
-        if train_target.iloc[i] == 0: 
-            negscore.append(temp)
-        if train_target.iloc[i] == 1: 
-            posscore.append(temp)
+        # avg_pos is the average value of each feature where the label is positive
+        # avg_neg is the average value of each feature where the label is negative
+        avg_pos = np.mean(pos_indices, axis=0)  # Eq. 3
+        avg_neg = np.mean(neg_indices, axis=0)  # Eq. 4
 
-    # posscoreavg and negscoreavg are average values of records scores for positive and negative classes
-    posscoreavg = statistics.mean(posscore) # Eq. 7
-    negscoreavg = statistics.mean(negscore) # Eq. 8
+        # weights are calculated based on Eq. 3 and Eq. 4
 
-    # bias is calculated using a weighted average
-    global bias
+        self.weights = (avg_pos - avg_neg) / (avg_pos + avg_neg)  # Eq. 5
 
-    bias = (len(negscore) * posscoreavg + len(posscore) * negscoreavg) / (len(negscore) + len(posscore)) # Eq. 9
 
-    
-# This is for prediction. When the model is learned, it cal be applied on the test data. test_predictors are the data without labels.
-def predict(test_predictors):
+        # For each record, a score is calculated. If the record is positive/negative, the score will be added to posscore/negscore
+        sum_scores = np.dot(X, self.weights)  # Eq. 6
 
-    pred = []
-    temp = 0
+        pos_label_count = np.count_nonzero(y)
+        neg_label_count = y.shape[0] - pos_label_count
 
-    for i in range(len(test_predictors)):
-        temp = np.dot(weights, (test_predictors.iloc[i]))
-        if temp <= bias: pred.append(0)
-        if temp > bias: pred.append(1)
+        # pos_score_avg and neg_score_avg are average values of records scores for positive and negative classes
+        pos_score_avg = np.mean(sum_scores[y == 1])  # Eq. 7
+        neg_score_avg = np.mean(sum_scores[y == 0])  # Eq. 8
 
-        # The list of predicted labels are returned
-    return pred
+        # bias is calculated using a weighted average
+
+        self.bias = (neg_label_count * pos_score_avg + pos_label_count * neg_score_avg) / (neg_label_count + pos_label_count)  # Eq. 9
+
+    def predict(self, test_predictors):
+        """
+        This is for prediction. When the model is trained, it can be applied on the test data.
+
+        Parameters
+        ----------
+        test_predictors: either list or ndarray, two dimensional
+            the data without labels in
+
+        Returns
+        ----------
+        predictions in numpy array
+
+        """
+        X = test_predictors
+        if isinstance(test_predictors, list):
+            X = np.array(test_predictors, dtype="float32")
+
+        temp = np.dot(X, self.weights)
+        preds = np.where(temp <= self.bias, 0 , 1)
+        return preds
