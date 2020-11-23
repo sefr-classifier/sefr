@@ -2,7 +2,6 @@ import numpy as np
 
 
 class SEFR:
-
     def __init__(self):
         self.weights = []
         self.bias = 0
@@ -10,7 +9,6 @@ class SEFR:
     def fit(self, train_predictors, train_target):
         """
         This is used for training the classifier on data.
-
         Parameters
         ----------
         train_predictors : float, either list or numpy array
@@ -19,12 +17,10 @@ class SEFR:
             labels, should consist of 0s and 1s
         """
         X = train_predictors
-        if isinstance(train_predictors, list):
-            X = np.array(train_predictors, dtype="float32")
+        X = np.array(train_predictors, dtype="float32")
 
         y = train_target
-        if isinstance(train_target, list):
-            y = np.array(train_target, dtype="int32")
+        y = np.array(train_target, dtype="int32")
 
         # pos_labels are those records where the label is positive
         # neg_labels are those records where the label is negative
@@ -43,7 +39,7 @@ class SEFR:
 
         # weights are calculated based on Eq. 3 and Eq. 4
 
-        self.weights = (avg_pos - avg_neg) / (avg_pos + avg_neg)  # Eq. 5
+        self.weights = (avg_pos - avg_neg) / (avg_pos + avg_neg + 0.0000001)  # Eq. 5
 
 
         # For each record, a score is calculated. If the record is positive/negative, the score will be added to posscore/negscore
@@ -63,16 +59,13 @@ class SEFR:
     def predict(self, test_predictors):
         """
         This is for prediction. When the model is trained, it can be applied on the test data.
-
         Parameters
         ----------
         test_predictors: either list or ndarray, two dimensional
             the data without labels in
-
         Returns
         ----------
         predictions in numpy array
-
         """
         X = test_predictors
         if isinstance(test_predictors, list):
