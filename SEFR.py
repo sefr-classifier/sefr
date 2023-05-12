@@ -12,7 +12,7 @@ class SEFR:
         Parameters
         ----------
         train_predictors : float, either list or numpy array
-            are the main data in DataFrame
+            are the main data
         train_target : integer, numpy array
             labels, should consist of 0s and 1s
         """
