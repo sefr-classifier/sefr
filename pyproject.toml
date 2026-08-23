@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sefr-classifier"
+version = "1.1.0"
+description = "SEFR: a fast linear-time binary classifier for ultra-low power devices"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+  { name = "Hamidreza Keshavarz", email = "keshavarz.h@modares.ac.ir" },
+]
+keywords = ["machine-learning", "classification", "edge", "tinyml", "linear"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.9"
+dependencies = [
+  "numpy>=1.20",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7",
+  "scikit-learn>=1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/sefr-classifier/sefr"
+Paper = "https://arxiv.org/abs/2006.04620"
+Issues = "https://github.com/sefr-classifier/sefr/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sefr*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

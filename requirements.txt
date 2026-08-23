@@ -1,0 +1,6 @@
+# Core runtime
+numpy>=1.20
+
+# Examples & tests (optional)
+# scikit-learn>=1.0
+# pytest>=7

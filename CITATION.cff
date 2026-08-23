@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+title: "SEFR: A Fast Linear-Time Classifier for Ultra-Low Power Devices"
+message: "If you use this software, please cite it using the metadata from this file."
+authors:
+  - family-names: Keshavarz
+    given-names: Hamidreza
+  - family-names: Abadeh
+    given-names: Mohammad Saniee
+  - family-names: Rawassizadeh
+    given-names: Reza
+preferred-citation:
+  type: article
+  title: "SEFR: A Fast Linear-Time Classifier for Ultra-Low Power Devices"
+  authors:
+    - family-names: Keshavarz
+      given-names: Hamidreza
+    - family-names: Abadeh
+      given-names: Mohammad Saniee
+    - family-names: Rawassizadeh
+      given-names: Reza
+  year: 2020
+  doi: 10.48550/arXiv.2006.04620
+  url: https://arxiv.org/abs/2006.04620
+repository-code: https://github.com/sefr-classifier/sefr
+license: MIT
