@@ -131,6 +131,6 @@ MIT — see [LICENSE](LICENSE).
 
 ## Authors
 
-- Hamidreza Keshavarz — keshavarz.h@modares.ac.ir  
+- Hamidreza Keshavarz 
 - Mohammad Saniee Abadeh  
 - Reza Rawassizadeh  
